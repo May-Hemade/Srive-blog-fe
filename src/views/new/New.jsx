@@ -1,25 +1,49 @@
-import { convertToHTML } from "draft-convert";
-import { EditorState } from "draft-js";
-import React, { useEffect, useState } from "react";
-import { Button, Container, Form } from "react-bootstrap";
-import { Editor } from "react-draft-wysiwyg";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import "./styles.css";
+import { convertToHTML } from "draft-convert"
+import { EditorState } from "draft-js"
+import React, { useEffect, useState } from "react"
+import { Button, Container, Form } from "react-bootstrap"
+import { Editor } from "react-draft-wysiwyg"
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
+import "./styles.css"
 const NewBlogPost = (props) => {
+  const postBlogs = async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_HOST}blogs`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify({ title }),
+      })
+      if (response.ok) {
+        const data = await response.json()
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const [title, setTitle] = useState("")
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
-  );
-  const [html, setHTML] = useState(null);
+  )
+  const [html, setHTML] = useState(null)
   useEffect(() => {
-    let html = convertToHTML(editorState.getCurrentContent());
-    setHTML(html);
-  }, [editorState]);
+    let html = convertToHTML(editorState.getCurrentContent())
+    setHTML(html)
+  }, [editorState])
   return (
     <Container className="new-blog-container">
-      <Form className="mt-5">
+      <Form className="mt-5" onSubmit={postBlogs}>
         <Form.Group controlId="blog-form" className="mt-3">
           <Form.Label>Title</Form.Label>
-          <Form.Control size="lg" placeholder="Title" />
+          <Form.Control
+            size="lg"
+            placeholder="Title"
+            onChange={(event) => {
+              setTitle(event.target.value)
+            }}
+          />
         </Form.Group>
         <Form.Group controlId="blog-category" className="mt-3">
           <Form.Label>Category</Form.Label>
@@ -58,7 +82,7 @@ const NewBlogPost = (props) => {
         </Form.Group>
       </Form>
     </Container>
-  );
-};
+  )
+}
 
-export default NewBlogPost;
+export default NewBlogPost
