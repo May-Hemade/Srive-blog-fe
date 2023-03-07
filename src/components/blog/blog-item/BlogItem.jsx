@@ -1,10 +1,10 @@
-import React from "react";
-import { Card } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import BlogAuthor from "../blog-author/BlogAuthor";
-import "./styles.css";
+import React from "react"
+import { Card } from "react-bootstrap"
+import { Link } from "react-router-dom"
+import BlogAuthor from "../blog-author/BlogAuthor"
+import "./styles.css"
 const BlogItem = (props) => {
-  const { title, cover, author, _id } = props;
+  const { title, cover, author, _id } = props
   return (
     <Link to={`/blog/${_id}`} className="blog-link">
       <Card className="blog-card">
@@ -14,10 +14,13 @@ const BlogItem = (props) => {
         </Card.Body>
         <Card.Footer>
           <BlogAuthor {...author} />
+          <a onClick={(e) => e.stopPropagation()} href={`${process.env.REACT_APP_HOST}blogs/${_id}/pdf`}>
+            pdf
+          </a>
         </Card.Footer>
       </Card>
     </Link>
-  );
-};
+  )
+}
 
-export default BlogItem;
+export default BlogItem
