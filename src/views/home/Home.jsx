@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react"
 import { Container } from "react-bootstrap"
+import { useNavigate } from "react-router-dom"
 import BlogList from "../../components/blog/blog-list/BlogList"
 import "./styles.css"
 
 const Home = (props) => {
+  const navigate = useNavigate()
   const [blogs, setBlogs] = useState([])
   const getBlogs = async () => {
     try {
@@ -11,14 +13,19 @@ const Home = (props) => {
       if (response.ok) {
         const data = await response.json()
         console.log(blogs)
-        setBlogs(data)
+        setBlogs(data.blogs)
       }
     } catch (error) {
       console.log(error)
     }
   }
   useEffect(() => {
-    getBlogs()
+    const token = localStorage.getItem("token")
+    if (token) {
+      getBlogs()
+    } else {
+      navigate("/login")
+    }
   }, [])
 
   return (

@@ -9,21 +9,21 @@ const NewBlogPost = (props) => {
   const postBlogs = async (event) => {
     event.preventDefault()
     let blog = {
+      content: editorState.getCurrentContent(),
       title,
       category,
-      cover:
-        "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
+      cover: "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
       author: {
         name: "someone",
         ID: "qwerewr121",
-        avatar:
-          "https://www.simplilearn.com/ice9/free_resources_article_thumb/what_is_image_Processing.jpg",
+        avatar: "https://www.simplilearn.com/ice9/free_resources_article_thumb/what_is_image_Processing.jpg",
       },
     }
     try {
       const response = await fetch(`${process.env.REACT_APP_HOST}blogs`, {
         headers: {
           "Content-Type": "application/json",
+          // Authorization : `Basic ${base64.encode(username + ":" + password)}`
         },
         method: "POST",
         body: JSON.stringify(blog),
@@ -41,14 +41,11 @@ const NewBlogPost = (props) => {
     const formData = new FormData()
     formData.append("cover", cover)
     try {
-      let response = await fetch(
-        `${process.env.REACT_APP_HOST}blogs/${id}/uploadCover`,
-        {
-          headers: {},
-          method: "POST",
-          body: formData,
-        }
-      )
+      let response = await fetch(`${process.env.REACT_APP_HOST}blogs/${id}/uploadCover`, {
+        headers: {},
+        method: "POST",
+        body: formData,
+      })
       if (response.ok) {
         const data = await response.json()
       }
@@ -59,9 +56,7 @@ const NewBlogPost = (props) => {
   const [category, setCategory] = useState("")
   const [cover, setCover] = useState(null)
 
-  const [editorState, setEditorState] = useState(() =>
-    EditorState.createEmpty()
-  )
+  const [editorState, setEditorState] = useState(() => EditorState.createEmpty())
   const [html, setHTML] = useState(null)
   useEffect(() => {
     let html = convertToHTML(editorState.getCurrentContent())
@@ -90,11 +85,7 @@ const NewBlogPost = (props) => {
         </Form.Group>
         <Form.Group controlId="blog-category" className="mt-3">
           <Form.Label>Category</Form.Label>
-          <Form.Control
-            size="lg"
-            as="select"
-            onChange={(event) => setCategory(event.target.value)}
-          >
+          <Form.Control size="lg" as="select" onChange={(event) => setCategory(event.target.value)}>
             <option>Category1</option>
             <option>Category2</option>
             <option>Category3</option>
